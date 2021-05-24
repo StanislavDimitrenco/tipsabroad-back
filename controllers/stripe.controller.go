@@ -15,10 +15,11 @@ type createCheckoutSessionResponse struct {
 }
 
 type User struct {
-	Id    int    `json:"id"`
-	Name  string `json:"name"`
-	Image string `json:"image"`
-	Tip   int64  `json:"tip"`
+	Id        int    `json:"user"`
+	Name      string `json:"name"`
+	Image     string `json:"image"`
+	CompanyId int    `json:"company_id"`
+	Tip       int64  `json:"tip"`
 }
 
 func CreateCheckoutSession(c *fiber.Ctx) error {
@@ -38,8 +39,8 @@ func CreateCheckoutSession(c *fiber.Ctx) error {
 	//img := fmt.Sprintf("%/img/%s",os.Getenv("HOST"),user.Image)
 	images = append(images, &img)
 
-	successURL := fmt.Sprintf("?success=true&id=%d&tip=%d", user.Id, user.Tip)
-	canceledURL := fmt.Sprintf("?canceled=true&id=%d&tip=%d", user.Id, user.Tip)
+	successURL := fmt.Sprintf("?success=true&user=%d&tip=%d&company_id=%d", user.Id, user.Tip, user.CompanyId)
+	canceledURL := fmt.Sprintf("?canceled=true&user=%d&tip=%d&company_id=%d", user.Id, user.Tip, user.CompanyId)
 
 	domain := os.Getenv("HOST")
 	params := &stripe.CheckoutSessionParams{
