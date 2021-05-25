@@ -1,0 +1,88 @@
+{
+  "app": "Tips",
+  "companies": [{
+    "id": 1,
+    "name": "Lux Hotel",
+    "department": [
+      {
+        "id": 1,
+        "name": "Housekeeping",
+        "employees": [
+          {
+            "id": 1,
+            "name": "Felippe Lucan",
+            "image": "person.png"
+          },
+          {
+            "id": 2,
+            "name": "Sophia Lucanos",
+            "image": "big-avatar.png"
+          },
+          {
+            "id": 3,
+            "name": "Ava Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 4,
+            "name": "Elizabeth Lucanos",
+            "image": "big-avatar.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Dining",
+        "employees": [
+          {
+            "id": 5,
+            "name": "Isabella Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 6,
+            "name": "Avery Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 7,
+            "name": "Charlotte Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 8,
+            "name": "Amelia Lucanos",
+            "image": "person.png"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Dining",
+        "employees": [
+          {
+            "id": 9,
+            "name": "Isabella Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 10,
+            "name": "Avery Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 11,
+            "name": "Charlotte Lucanos",
+            "image": "person.png"
+          },
+          {
+            "id": 12,
+            "name": "Amelia Lucanos",
+            "image": "person.png"
+          }
+        ]
+      }
+    ]
+  }]
+
+}

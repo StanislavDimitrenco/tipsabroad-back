@@ -27,8 +27,6 @@ func CreateCheckoutSession(c *fiber.Ctx) error {
 
 	var images []*string
 
-	img := "https://gafki.ru/wp-content/uploads/2019/10/1-tipichnyj-dikij-lesnoj-kot.jpg" //demo
-
 	bodyResponse := c.Body()
 
 	err := json.Unmarshal(bodyResponse, &user)
@@ -36,7 +34,12 @@ func CreateCheckoutSession(c *fiber.Ctx) error {
 		log.Printf("can't parse client responce, %v", err)
 	}
 
-	//img := fmt.Sprintf("%/img/%s",os.Getenv("HOST"),user.Image)
+	img := "https://gafki.ru/wp-content/uploads/2019/10/1-tipichnyj-dikij-lesnoj-kot.jpg" //demo
+
+	if os.Getenv("PROD") == "yes" {
+		img = fmt.Sprintf("%s/%s", os.Getenv("STATIC_IMG_HOST"), user.Image)
+	}
+
 	images = append(images, &img)
 
 	successURL := fmt.Sprintf("?success=true&user=%d&tip=%d&company_id=%d", user.Id, user.Tip, user.CompanyId)
