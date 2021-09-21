@@ -8,6 +8,7 @@ import (
 	"github.com/stripe/stripe-go/v71/checkout/session"
 	"log"
 	"os"
+	"strconv"
 )
 
 type createCheckoutSessionResponse struct {
@@ -20,6 +21,8 @@ type User struct {
 	Image     string `json:"image"`
 	CompanyId int    `json:"company_id"`
 	Tip       int64  `json:"tip"`
+	Rating    int    `json:"rating"`
+	Comment   string `json:"comment"`
 }
 
 func CreateCheckoutSession(c *fiber.Ctx) error {
@@ -40,33 +43,44 @@ func CreateCheckoutSession(c *fiber.Ctx) error {
 		img = fmt.Sprintf("%s/%s", os.Getenv("STATIC_IMG_HOST"), user.Image)
 	}
 
+	var description = &user.Comment
+
+	if user.Comment == "" {
+		description = nil
+	}
+
 	images = append(images, &img)
 
 	successURL := fmt.Sprintf("?success=true&user=%d&tip=%d&company_id=%d", user.Id, user.Tip, user.CompanyId)
 	canceledURL := fmt.Sprintf("?canceled=true&user=%d&tip=%d&company_id=%d", user.Id, user.Tip, user.CompanyId)
 
+	//create metadata
+	metaData := make(map[string]string)
+	metaData["rating"] = strconv.Itoa(user.Rating)
+
 	domain := os.Getenv("HOST")
 	params := &stripe.CheckoutSessionParams{
-		PaymentMethodTypes: stripe.StringSlice([]string{
-			"card",
-		}),
-		CustomerEmail: nil,
+		CancelURL: stripe.String(domain + canceledURL),
 		LineItems: []*stripe.CheckoutSessionLineItemParams{
 			{
 				PriceData: &stripe.CheckoutSessionLineItemPriceDataParams{
 					Currency: stripe.String(string(stripe.CurrencyUSD)),
 					ProductData: &stripe.CheckoutSessionLineItemPriceDataProductDataParams{
-						Name:   stripe.String(user.Name),
-						Images: images,
+						Name:        stripe.String(user.Name),
+						Images:      images,
+						Metadata:    metaData,
+						Description: description,
 					},
 					UnitAmount: stripe.Int64(user.Tip),
 				},
 				Quantity: stripe.Int64(1),
 			},
 		},
-		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
+		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
+		PaymentMethodTypes: stripe.StringSlice([]string{
+			"card",
+		}),
 		SuccessURL: stripe.String(domain + successURL),
-		CancelURL:  stripe.String(domain + canceledURL),
 	}
 
 	session, err := session.New(params)
